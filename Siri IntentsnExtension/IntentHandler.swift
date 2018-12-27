@@ -38,10 +38,14 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
     // Once resolution is completed, perform validation on the intent and provide confirmation (optional).
     func confirm(intent: INSendMessageIntent, completion: @escaping (INSendMessageIntentResponse) -> Void) {
         // Verify user is authenticated and your app is ready to send a message.
-        
-        let userActivity = NSUserActivity(activityType: NSStringFromClass(INSendMessageIntent.self))
-        let response = INSendMessageIntentResponse(code: .ready, userActivity: userActivity)
-        completion(response)
+        let isUserLogedIn = true // Need to check
+        if isUserLogedIn {
+            let userActivity = NSUserActivity(activityType: NSStringFromClass(INSendMessageIntent.self))
+            let response = INSendMessageIntentResponse(code: .ready, userActivity: userActivity)
+            completion(response)
+        } else {
+            completion(INSendMessageIntentResponse(code: .failureRequiringAppLaunch, userActivity: nil))
+        }
     }
     
     // Handle the completed intent (required).
@@ -88,5 +92,5 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             completion(resolutionResults)
         }
     }
-
+    
 }
